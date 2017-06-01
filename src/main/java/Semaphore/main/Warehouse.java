@@ -17,7 +17,7 @@ public class Warehouse {
     private boolean isWarehouseFree;
 
     public Warehouse(){
-        productsInStock = 0;
+        productsInStock = 40;
         isWarehouseFree = true;
     }
 
@@ -39,18 +39,22 @@ public class Warehouse {
         LOGGER.info("Warehouse is open.");
     }
 
-    public void deliverProducts(int newProducts){
+    public int deliverProducts(int newProducts){
         if (!isWarehouseFree){
             productsInStock += newProducts;
             LOGGER.info("Supplier delivered " + newProducts + " new products." + "Now in stock " + productsInStock + " products.");
+            return newProducts;
         }
+        return 0;
     }
 
     public int buyProducts(int numberOfProductsToBuy){
         if (isWarehouseFree){
-            productsInStock -= numberOfProductsToBuy;
-            LOGGER.info("Client bought " + numberOfProductsToBuy + " products." + "Bought by: " + Thread.currentThread());
-            return numberOfProductsToBuy;
+            if (productsInStock >= numberOfProductsToBuy) {
+                productsInStock -= numberOfProductsToBuy;
+                LOGGER.info("Client bought " + numberOfProductsToBuy + " products." + "Bought by: " + Thread.currentThread());
+                return numberOfProductsToBuy;
+            }
         }
         return 0;
     }

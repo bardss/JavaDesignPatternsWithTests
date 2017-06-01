@@ -4,27 +4,39 @@ public class Client extends Thread{
 
     private Warehouse warehouse;
     private int boughtProducts;
+    private int howManyTries;
 
     public Client(){
         warehouse = Warehouse.getInstance();
         boughtProducts = 0;
-        start();
+        howManyTries = 0;
     }
 
     @Override
     public void run() {
         while (true){
             try {
-                if (boughtProducts < 100) {
-                    boughtProducts += warehouse.buyProducts(10);
-                    sleep(135);
-                } else {
-                    break;
+                for (int i = 0 ; i < howManyTries; i++){
+                    buyProducts();
                 }
+                break;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void setHowManyTries(int howManyTries){
+        this.howManyTries = howManyTries;
+    }
+
+    public void buyProducts() throws InterruptedException {
+        boughtProducts += warehouse.buyProducts(10);
+        sleep(135);
+    }
+
+    public int getNumberOfBought(){
+        return boughtProducts;
     }
 
 }
